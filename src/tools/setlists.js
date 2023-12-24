@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const { subYears, format } = require('date-fns');
+const { subYears, subMonths, format } = require('date-fns');
 
 const { searchSetlist } = require("../lib/setlistfm");
 
@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 (async () => {
     const bands = await prisma.band.findMany()
     const currentDate = new Date();
-    const oneYearAgo = subYears(currentDate, 4);
+    const oneYearAgo = subYears(subMonths(currentDate, 6), 5);
     const oneYearAgoFormatted = format(oneYearAgo, 'dd-MM-yyyy');
 
     for (let band of bands) {
