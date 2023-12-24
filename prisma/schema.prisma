@@ -21,15 +21,16 @@ model Band {
   name      String     @db.VarChar(255)
   data      Json?
   bandUsers BandUser[]
+  setlist   Setlist[]
 }
 
 model Setlist {
   id            Int            @id @default(autoincrement())
   created_at    DateTime       @default(now())
   updated_at    DateTime       @updatedAt
-  name          String         @db.VarChar(255)
   data          Json?
-  setlist_Users Setlist_User[]
+  band_id       Int
+  band          Band           @relation(fields: [band_id], references: [id])
 }
 
 model BandUser {
@@ -38,14 +39,6 @@ model BandUser {
   band_id Int
   user    User   @relation(fields: [user_id], references: [id])
   user_id String
-}
-
-model Setlist_User {
-  id         Int     @id @default(autoincrement())
-  setlist    Setlist @relation(fields: [setlist_id], references: [id])
-  setlist_id Int
-  user       User    @relation(fields: [user_id], references: [id])
-  user_id    String
 }
 
 // Necessary for Next auth
@@ -84,7 +77,6 @@ model User {
   accounts      Account[]
   sessions      Session[]
   bandUsers     BandUser[]
-  Setlist_User  Setlist_User[]
 }
 
 model VerificationToken {
